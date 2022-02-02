@@ -1,5 +1,5 @@
 # driver_q
 
 ## programm ausführen
-# py main.py
+(im Terminal oder Code Editor:) py main.py
 (python3 benötigt im path)
