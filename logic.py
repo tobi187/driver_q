@@ -3,9 +3,11 @@ import json
 
 moegliche_antworten = ["a", "b", "c", "d"]
 
+# DIESE FUNKTION ÖFFNET DAS JSON FILE MIT FRAGEN UND ERSTELLT FÜR
+# JEDE FRAGE EIN QUESTIONMODEL UND GIBT EINE LISTE MIT QUESTIONMODEL ZURÜCK
+
 
 def fragen_einlesen():
-
     # öffne json datei mit fragen im lesemodus
     with open("questions.json", "r") as file:
         # jsonliste lesen und in var fragen speichern
@@ -26,11 +28,14 @@ def fragen_einlesen():
             # model zur list hinzufügen
             fragen_model_liste.append(frage_model)
 
-        # fragen model list zurückgeben
+        # fragen model liste
+        # zurückgeben
         return fragen_model_liste
 
 
-def frage_stellen(fragen_liste):
+# DIESE FUNKTION GIBT FÜR JEDES QUESTIONMODEL IN DER LISTE DIE FRAGE + ANTWORTMGLKEITEN
+# IN DER CONSOLE AUS UND FÜGT DEM QUESTIONMODEL DIE ANTWORT VOM USER HINZU
+def fragen_stellen(fragen_liste):
     print("Fahrschulfragen")
     print("Test antowrt immer b")
 
@@ -55,30 +60,39 @@ def frage_stellen(fragen_liste):
             else:
                 antwort = input("Bitte wähle a, b, c oder d: ")
 
+        # jetzt user antwort ins model hinzufügen
         aktuelle_frage.user_answer = antwort
 
+    # fragenliste(mit userantwort hinzugefügt) zurückgeben
     return fragen_liste
 
 
-def zaehle_richtige_antworten(fragen_liste: list[questionModel]):
+# DIESE FUNKTION ÜBERPRÜFT WIEVIELE FRAGEN RICHTIG BEANTWORTET WURDEN
+def zaehle_richtige_antworten(fragen_liste):
     # anzahl richtig beantwortete
     counter = 0
     for frage in fragen_liste:
-        # wenn antwort richtig ist counter 1 hoch setzen
+        # wenn antwort richtig ist counter +1
         if frage.correct_answer == frage.user_answer:
             counter += 1
 
+    # dann counter (anzahl korrekte Antworten) zurückgeben (als str für Konsolenausgabe)
     return str(counter)
 
 
+# NOCHMAL ALLE FRAGEN DURCHGEHEN, UND DIE FRAGE + ANTWORTMGL + RICHTIGE ANTOWRT + EIGENE ANTOWRT
+# + ERKLÄRUNG (WENN VORHANDEN) AUSGEBEN
 def auswertung(fragen_liste):
-    print("\n")
+
     print("_______________________________________________________________________________")
     print("\n")
-    for frage in fragen_liste:
 
+    for frage in fragen_liste:
+        # Wenn richtig beantwortet
         if frage.correct_answer == frage.user_answer:
-            print("Korrekt brantwortet (Korrekte Antwort: " + frage.correct_answer + ")")
+            print("Korrekt brantwortet (Korrekte Antwort: " +
+                  frage.correct_answer + ")")
+        # wenn falsch beantwortet
         else:
             print("Leider falsch (Korrekte Antwort: " + frage.correct_answer + ")")
             print("Deine Antwort war: " + frage.user_answer)
@@ -88,36 +102,8 @@ def auswertung(fragen_liste):
         print("b: " + frage.answer_options[1])
         print("c: " + frage.answer_options[2])
         print("d: " + frage.answer_options[3])
+
+        # Wenn Erklärung dabei ist dann gib Erklärung auch aus
         if frage.explanation != "":
             print("Erklärung: " + frage.explanation)
         print("\n")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
