@@ -1,21 +1,4 @@
 import questionModel
-import json
-import random
-
-# DIESE FUNKTION ÖFFNET DAS JSON FILE MIT FRAGEN UND ERSTELLT FÜR
-# JEDE FRAGE EIN QUESTIONMODEL UND GIBT EINE LISTE MIT QUESTIONMODEL ZURÜCK
-
-
-def eingabe_validieren(details: questionModel.Questions):
-    antworten = details.user_antworten.split(",")
-    for antwort in antworten:
-        if antwort.strip() not in details.korrekte_antworten:
-            return False
-    if len(antworten) == len(details.korrekte_antworten):
-        return True
-    else:
-        return False
-
 
 # DIESE FUNKTION GIBT FÜR JEDES QUESTIONMODEL IN DER LISTE DIE FRAGE + ANTWORTMGLKEITEN
 # IN DER CONSOLE AUS UND FÜGT DEM QUESTIONMODEL DIE ANTWORT VOM USER HINZU
@@ -23,8 +6,8 @@ def fragen_stellen(fragen_liste):
     print("Fahrschulfragen")
     colors = questionModel.BColors()
 
-    for fragen_nummer in range(10):
-        aktuelle_frage: questionModel.Questions = fragen_liste[fragen_nummer]
+    for aktuelle_frage in fragen_liste:
+        print("\n")
         # frage + antwortMöglichkeiten in der Konsole ausgeben
         print(colors.UNDERLINE + aktuelle_frage.frage + colors.ENDC)
         print("a: " + aktuelle_frage.antwort_mgl[0])
@@ -37,21 +20,29 @@ def fragen_stellen(fragen_liste):
             moegliche_antworten = ["a", "b", "c", "d"]
             print("d: " + aktuelle_frage.antwort_mgl[3])
 
-        print("\n")
+        #print("\n")
 
         # überprüfung ob antwort = a b c oder d
-        while True:
+
+        antwort_nicht_valide = True
+
+        antwort_liste = []
+
+        while antwort_nicht_valide:
             antwort = input("Wähle die korrekte Antwort: ").replace(" ", "")
 
             antwort_liste = antwort.split(",")
-            for antwort in antwort_liste:
-                if antwort not in moegliche_antworten:
+
+            antwort_nicht_valide = False
+
+            for buchstabe in antwort_liste:
+                if buchstabe not in moegliche_antworten:
                     print("Bitte wähle eine valide Antwortmöglichkeit (bei mehreren antworten mit komma trennen)")
-                    continue
-            break
+                    antwort_nicht_valide = True
+
 
         # jetzt user antwort ins model hinzufügen
-        aktuelle_frage.user_answer = antwort_liste
+        aktuelle_frage.user_antworten = antwort_liste
 
     # fragenliste(mit userantwort hinzugefügt) zurückgeben
     return fragen_liste
@@ -75,23 +66,30 @@ def zaehle_richtige_antworten(fragen_liste):
 
 # NOCHMAL ALLE FRAGEN DURCHGEHEN, UND DIE FRAGE + ANTWORTMGL + RICHTIGE ANTOWRT + EIGENE ANTOWRT
 # + ERKLÄRUNG (WENN VORHANDEN) AUSGEBEN
-def auswertung(fragen_liste: list[questionModel.Questions]):
+def auswertung(frage):
     colors = questionModel.BColors()
 
-    print("_______________________________________________________________________________")
+    antwort_schluessel = {0: "a", 1: "b", 2: "c", 3: "d"}
+
+    print("\n")
+    if frage.korrekte_antworten == list(set(frage.user_antworten)):
+        print(colors.OKGREEN + "Frage: " + frage.frage + " - Richtig" + colors.ENDC)
+    else:
+        print(colors.FAIL + "Frage: " + frage.frage + " - Falsch" + colors.ENDC)
+
     print("\n")
 
-    for frage in fragen_liste:
-        print("Frage: " + colors.UNDERLINE + frage.frage + colors.ENDC)
-        # Wenn richtig beantwortet
-        if frage.korrekte_antworten == frage.user_antworten:
-            print(f"{colors.OKGREEN}Korrekt brantwortet (Korrekte Antwort: {frage.correct_answer}){colors.ENDC}")
-        # wenn falsch beantwortet
+    for ant_index in range(len(frage.antwort_mgl)):
+        if antwort_schluessel[ant_index] in frage.user_antworten and antwort_schluessel[ant_index] in frage.korrekte_antworten:
+            print(colors.OKGREEN + colors.UNDERLINE + frage.antwort_mgl[ant_index] + colors.ENDC)
+        elif antwort_schluessel[ant_index] in frage.user_antworten:
+            print(colors.UNDERLINE + frage.antwort_mgl[ant_index] + colors.ENDC)
+        elif antwort_schluessel[ant_index] in frage.korrekte_antworten:
+            print(colors.OKGREEN + frage.antwort_mgl[ant_index] + colors.ENDC)
         else:
-            print(f"{colors.FAIL}Leider falsch (Korrekte Antwort: {frage.correct_answer}){colors.ENDC}")
-            print("Deine Antwort war: " + frage.user_answer)
+            print(frage.antwort_mgl[ant_index])
 
-        # Wenn Erklärung dabei ist dann gib Erklärung auch aus
-        if frage.erklaerung != "":
-            print(f"{colors.OKBLUE}Erklärung: {frage.erklaerung}{colors.ENDC}")
-        print("\n")
+    # Wenn Erklärung dabei ist dann gib Erklärung auch aus
+    if frage.erklaerung != "":
+        print(colors.OKBLUE + "Erklärung: " + frage.erklaerung + colors.ENDC)
+    print("\n")

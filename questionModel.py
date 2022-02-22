@@ -62,7 +62,7 @@ fragen_liste = [
         frage="Warum müssen Sie Ihr Fahrzeug bei winterlichen Fahrbahnverhältnissen mit Winterreifen ausstatten?",
         antwort_mgl=["Weil das Fahrzeug beim Bremsen auf einer Schneefahrbahn dadurch nicht so leicht ins Schleudern kommt",
                      "Weil die Bodenhaftung auf einer Schneefahrbahn dadurch besser ist",
-                     " Weil dadurch der Treibstoffverbrauch reduziert wird",
+                     "Weil dadurch der Treibstoffverbrauch reduziert wird",
                      "Weil Schneeketten nur auf Winterreifen montiert werden dürfen",
                      ],
         korrekte_antworten=["a", "b"],
@@ -91,7 +91,7 @@ fragen_liste = [
     ),
     Questions(
         frage="Mit welchem Verhalten von Kindern müssen Sie an Zebrastreifen rechnen?",
-        antwort_mgl=[" Sie kehren ohne erkennbaren Grund auf dem Zebrastreifen um und laufen zurück",
+        antwort_mgl=["Sie kehren ohne erkennbaren Grund auf dem Zebrastreifen um und laufen zurück",
                      "Sie schätzen Geschwindigkeiten und Entfernungen herannahender Fahrzeuge immer richtig ein und warten am Fahrbahnrand",
                      "Sie laufen auf den Zebrastreifen, ohne auf den Verkehr zu achten",
                      ],
@@ -112,7 +112,7 @@ fragen_liste = [
     Questions(
         frage="Wodurch kann die Fahrtüchtigkeit herabgesetzt werden?",
         antwort_mgl=["Durch Alkohol und andere berauschende Mittel",
-                     " Durch Übermüdung",
+                     "Durch Übermüdung",
                      "Durch bestimmte Medikamente"
                      ],
         korrekte_antworten=["a", "b", "c"],
@@ -171,7 +171,7 @@ fragen_liste = [
     ),
     Questions(
         frage="Was können Sie tun, um die Umwelt zu schonen?",
-        antwort_mgl=[" Fahren mit Vollgas",
+        antwort_mgl=["Fahren mit Vollgas",
                      "Fahren in überfüllte Innenstädte",
                      "Kurzstreckenfahrten"
                      ],
@@ -217,7 +217,7 @@ Geschwindigkeit von 50 km/h beträgt der Anhalteweg 40 Meter. """
     Questions(
         frage="Auf welchen Straßen gilt die Richtgeschwindigkeit von 130 km/h?",
         antwort_mgl=["Auf Kraftfahrstraßen außerhalb geschlossener Ortschaften mit baulich getrennten Fahrbahnen für jede Richtung",
-                     " Auf Kraftfahrstraßen außerhalb geschlossener Ortschaften mit mindestens zwei markierten Fahrstreifen für jede Richtung",
+                     "Auf Kraftfahrstraßen außerhalb geschlossener Ortschaften mit mindestens zwei markierten Fahrstreifen für jede Richtung",
                      "Auf Autobahnen"
                      ],
         korrekte_antworten=["c"],
