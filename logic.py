@@ -23,7 +23,7 @@ def fragen_stellen(fragen_liste):
     print("Fahrschulfragen")
     colors = questionModel.BColors()
 
-    for fragen_nummer in range(10):
+    for fragen_nummer in range(len(fragen_liste)):
         aktuelle_frage: questionModel.Questions = fragen_liste[fragen_nummer]
         # frage + antwortMöglichkeiten in der Konsole ausgeben
         print(colors.UNDERLINE + aktuelle_frage.frage + colors.ENDC)
@@ -46,7 +46,8 @@ def fragen_stellen(fragen_liste):
             antwort_liste = antwort.split(",")
             for antwort in antwort_liste:
                 if antwort not in moegliche_antworten:
-                    print("Bitte wähle eine valide Antwortmöglichkeit (bei mehreren antworten mit komma trennen)")
+                    print(
+                        "Bitte wähle eine valide Antwortmöglichkeit (bei mehreren antworten mit komma trennen)")
                     continue
             break
 
@@ -85,10 +86,12 @@ def auswertung(fragen_liste: list[questionModel.Questions]):
         print("Frage: " + colors.UNDERLINE + frage.frage + colors.ENDC)
         # Wenn richtig beantwortet
         if frage.korrekte_antworten == frage.user_antworten:
-            print(f"{colors.OKGREEN}Korrekt brantwortet (Korrekte Antwort: {frage.correct_answer}){colors.ENDC}")
+            print(
+                f"{colors.OKGREEN}Korrekt brantwortet (Korrekte Antwort: {frage.correct_answer}){colors.ENDC}")
         # wenn falsch beantwortet
         else:
-            print(f"{colors.FAIL}Leider falsch (Korrekte Antwort: {frage.correct_answer}){colors.ENDC}")
+            print(
+                f"{colors.FAIL}Leider falsch (Korrekte Antwort: {frage.correct_answer}){colors.ENDC}")
             print("Deine Antwort war: " + frage.user_answer)
 
         # Wenn Erklärung dabei ist dann gib Erklärung auch aus
