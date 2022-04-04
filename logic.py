@@ -1,5 +1,5 @@
 import questionModel
-import json
+import os
 import random
 
 # DIESE FUNKTION ÖFFNET DAS JSON FILE MIT FRAGEN UND ERSTELLT FÜR
@@ -27,32 +27,37 @@ def fragen_stellen(fragen_liste):
         aktuelle_frage: questionModel.Questions = fragen_liste[fragen_nummer]
         # frage + antwortMöglichkeiten in der Konsole ausgeben
         print(colors.UNDERLINE + aktuelle_frage.frage + colors.ENDC)
-        print("a: " + aktuelle_frage.antwort_mgl[0])
-        print("b: " + aktuelle_frage.antwort_mgl[1])
-        print("c: " + aktuelle_frage.antwort_mgl[2])
-
-        if len(aktuelle_frage.antwort_mgl) == 3:
-            moegliche_antworten = ["a", "b", "c"]
-        else:
-            moegliche_antworten = ["a", "b", "c", "d"]
-            print("d: " + aktuelle_frage.antwort_mgl[3])
+        
+        for buchstabe, mgl in aktuelle_frage.antwort_mgl.items():
+            print(f"{buchstabe}: {mgl}")
 
         print("\n")
 
         # überprüfung ob antwort = a b c oder d
         while True:
-            antwort = input("Wähle die korrekte Antwort: ").replace(" ", "")
+            antworten = input("Wähle die korrekte Antwort: ").replace(" ", "")
 
-            antwort_liste = antwort.split(",")
+            korrekt = True
+
+            antwort_liste = antworten.split(",")
             for antwort in antwort_liste:
-                if antwort not in moegliche_antworten:
-                    print(
-                        "Bitte wähle eine valide Antwortmöglichkeit (bei mehreren antworten mit komma trennen)")
-                    continue
-            break
+                if antwort not in aktuelle_frage.antwort_mgl.keys():
+                    korrekt = False
+                    
+            if korrekt:
+                break
+            else:
+                print("\n")
+                print("Bitte wähle eine valide Antwortmöglichkeit (bei mehreren antworten mit komma trennen)")
+
+        # doppelte werte entfernen + sortieren
+        formatierte_antworten =  list(set(antwort_liste))
+        formatierte_antworten.sort()
 
         # jetzt user antwort ins model hinzufügen
-        aktuelle_frage.user_answer = antwort_liste
+        fragen_liste[fragen_nummer].user_antworten = formatierte_antworten
+
+        print("\n")
 
     # fragenliste(mit userantwort hinzugefügt) zurückgeben
     return fragen_liste
@@ -76,25 +81,37 @@ def zaehle_richtige_antworten(fragen_liste):
 
 # NOCHMAL ALLE FRAGEN DURCHGEHEN, UND DIE FRAGE + ANTWORTMGL + RICHTIGE ANTOWRT + EIGENE ANTOWRT
 # + ERKLÄRUNG (WENN VORHANDEN) AUSGEBEN
-def auswertung(fragen_liste: list[questionModel.Questions]):
+def auswertung(index, frage):
     colors = questionModel.BColors()
 
-    print("_______________________________________________________________________________")
+    print("\n")
+    # prüfen ob antorten richtig sind
+    if frage.korrekte_antworten == frage.user_antworten:
+        print(colors.OKGREEN + "Frage " + str(index + 1) + ": " + frage.frage + " - Richtig" + colors.ENDC)
+    else:
+        print(colors.FAIL + "Frage " + str(index + 1) + ": " + frage.frage + " - Falsch" + colors.ENDC)
+
     print("\n")
 
-    for frage in fragen_liste:
-        print("Frage: " + colors.UNDERLINE + frage.frage + colors.ENDC)
-        # Wenn richtig beantwortet
-        if frage.korrekte_antworten == frage.user_antworten:
-            print(
-                f"{colors.OKGREEN}Korrekt brantwortet (Korrekte Antwort: {frage.correct_answer}){colors.ENDC}")
-        # wenn falsch beantwortet
+    # durch antwortmgl gehen
+    for ant_mgl in frage.antwort_mgl:
+        # wenn mglkeit richtig und von nutzer gewählt
+        if ant_mgl in frage.user_antworten and ant_mgl in frage.korrekte_antworten:
+            print(colors.OKGREEN + " (✓) " + frage.antwort_mgl[ant_mgl] + colors.ENDC)
+        # wenn mglkeit falsch und von nutzer gewählt
+        elif ant_mgl in frage.user_antworten:
+            print(colors.WARNING + " (X) " + frage.antwort_mgl[ant_mgl] + colors.ENDC)
+        # wenn mglkeit richtig aber nicht von nutzer gewählt
+        elif ant_mgl in frage.korrekte_antworten:
+            print(colors.OKGREEN + " (X) " + frage.antwort_mgl[ant_mgl] + colors.ENDC)
+        # wenn mgl falsch und nicht gewählt
         else:
-            print(
-                f"{colors.FAIL}Leider falsch (Korrekte Antwort: {frage.correct_answer}){colors.ENDC}")
-            print("Deine Antwort war: " + frage.user_answer)
+            print(" (X) " + frage.antwort_mgl[ant_mgl])
 
-        # Wenn Erklärung dabei ist dann gib Erklärung auch aus
-        if frage.erklaerung != "":
-            print(f"{colors.OKBLUE}Erklärung: {frage.erklaerung}{colors.ENDC}")
-        print("\n")
+    # Wenn Erklärung dabei ist dann gib Erklärung auch aus
+    if frage.erklaerung != "":
+        print(colors.OKBLUE + "Erklärung: " + frage.erklaerung + colors.ENDC)
+    print("\n")
+
+    # os.system('pause')  # test on windows
+

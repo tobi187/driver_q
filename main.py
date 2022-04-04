@@ -6,23 +6,25 @@ import questionModel
 # Einstiegspunkt
 def start():
     color = questionModel.BColors()
-
     fragen_liste = questionModel.fragen_liste
 
-    logic.fragen_stellen(fragen_liste)
+    fragen_liste = logic.fragen_stellen(fragen_liste)
 
     anzahl_richtig = logic.zaehle_richtige_antworten(fragen_liste)
 
     print("\n")
-    print(f"Herzlichen Glückwunsch, du hast " +
-          anzahl_richtig + f"von 20 richtig beantwortet")
+    if anzahl_richtig < 60:
+        print(color.FAIL + "Du hast " + str(anzahl_richtig) + " % von 20 Fragen richtig beantwortet. Das reicht leider nicht" + color.ENDC)
+    else:
+        print(color.OKCYAN + "Du hast " + str(anzahl_richtig) + " % von 20 Fragen richtig beantwortet. Hezlichen Glückwunsch du hast bestanden" + color.ENDC)
     print("\n")
 
     auswertung_anzeigen = input("Auswertung anzeigen? (j,n): ")
 
     print("\n")
     if auswertung_anzeigen.lower() == "j":
-        logic.auswertung(fragen_liste)
+        for index, frage in enumerate(fragen_liste):
+            logic.auswertung(index, frage)
 
 
 if __name__ == "__main__":
